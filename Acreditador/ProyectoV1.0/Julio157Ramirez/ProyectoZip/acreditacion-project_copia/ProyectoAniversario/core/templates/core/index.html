@@ -1,0 +1,178 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %} Acreditacion | DuocUC {% endblock %}
+
+{% block content %}
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <div class="form-group">
+                        <select class="form-control" id="exampleFormControlSelect1">
+                        </select>
+                    </div>
+
+
+                    <button type="button" id="btn_qr_close" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <video width="100%" id="preview" class="video"></video>
+                    <p id="p1"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="containe main" style="padding-top: 30px">
+        <div class="title d-flex justify-content-between align-items-center mb-3">
+            <h2 style="display: inline-block; font-weight: 800">Acreditador</h2>
+        </div>
+    </div>
+
+    <div class="box-base shadow-sm ">
+        <!--**********  Menu superior de las Tabla  **********-->
+        <div class=" d-flex flex-row flex-wrap justify-content-between align-content-center">
+            <div class="d-flex flex-row flex-wrap justify-content-between">
+                <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'busqueda' %}">{% csrf_token %}
+                    {{ form.text }}
+                    <button class="btn btn-outline-primary my-2 my-sm-0 " type="submit" id="button-search">Buscar
+                    </button>
+                </form>
+            </div>
+
+            <!-- Button trigger modal -->
+            <div class="d-flex justify-content-between align-items-center">
+                <button type="button" class="btn btn-primary mr-3" id="btn_qr" data-toggle="modal"
+                        data-target="#exampleModal">
+                    QR Lector
+                </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" disabled>
+                    Bar Lector
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="test-table mt-1">
+        <!--**********  Titulo tabla  **********-->
+        <div>
+            <p class="title-table pt-3">Asistentes inscritos</p>
+        </div>
+
+        {% if 'ok' in request.GET %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Acreditado!</strong> Puede visualizar los acreditados en la vista de <a
+                    href="{% url 'datos' %}">Datos</a>.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+        {% if 'fail' in request.GET %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error al buscar</strong>- El asistente no se encuentra registrado
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <a href="{% url 'index' %}"><span aria-hidden="true">&times;</span></a>
+                </button>
+            </div>
+        {% endif %}
+
+        <!--
+        {% if request.POST.text %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error al buscar</strong>- El asistente con RUN <strong>{{ request.POST.text }}</strong> no se encuentra registrado
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <a href="{% url 'index' %}"><span aria-hidden="true">&times;</span></a>
+                </button>
+            </div>
+        {% endif %}
+        -->
+
+
+        <!--**********  Tabla  **********-->
+        <table class="table table-hover">
+
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">RUN</th>
+                <th scope="col">NOMBRE</th>
+                <th scope="col">CORREO</th>
+                <th scope="col">ACCIÓN</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if asistentes.count > 0 %}
+                {% for asis in asistentes %}
+                    {% if asis.validador == False %}
+                        <tr>
+                            <th scope="row">{{ asis.identificador }}</th>
+                            <td>{{ asis.nombre }} {{ asis.apellido }}</td>
+                            <td>{{ asis.email }}</td>
+                            <td><a href="{% url 'acreditar' asis.id %}" id="btn_acreditar" class="btn btn-primary">Acreditar</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4">No se encuentran asistentes registrados.</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if success %}
+        <script>
+            setTimeout(function () {
+                document.getElementById('btn_acreditar').click();
+            }, 50);
+        </script>
+    {% endif %}
+{% endblock %}
+{% block script %}
+
+    <script>
+
+        /*
+        httpsÑ--portal.sidiv.registrocivil.cl-docstatus_RUN¡22606030'8/type¡CEDULA/serial¡106990053/mrz¡106990053195081962508197
+
+        */
+        $("#inputSearch").change(function () {
+            console.log(event);
+
+            let str = $('#inputSearch').val();
+            let pattern = "registrocivil.cl-docstatus_RUN";
+            if (str.search(pattern) !== -1) {
+                let str1 = str.split("docstatus_RUN")[1];
+                str1 = str1.replace('¡','');
+                str1 = str1.replace('¿','');
+                str = str1.split("/type")[0];
+                str = str.replace('\'', '-');
+            }
+            try {
+                let testNumber = str.parseInt();
+                if(str.search('-')===-1) {
+                    str = str.substr(0, str.length - 1) + '-' + str.substr(str.length - 1, 1);
+                }
+            } catch (ignore) {}
+
+            $('#inputSearch').val(str.trim());
+
+        });
+
+
+    </script>
+
+    <script src="{% static 'core/js/instascan.min.js' %}"></script>
+    <script src="{% static 'core/js/instacanConf.js' %}"></script>
+{% endblock %}

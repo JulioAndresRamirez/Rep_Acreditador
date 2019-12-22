@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+        <script defer src="https://use.fontawesome.com/releases/v5.6.3/js/all.js" integrity="sha384-EIHISlAOj4zgYieurP0SdoiBYfGJKkgWedPHH4jCzpCXLmzVsw1ouK59MuUtP4a1"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <title>Maqueta 2.0</title>
+</head>
+<body>
+
+    <!--**********  HEADER  **********-->
+    <header id="header" >
+        <nav class="navbar">
+            <div class="container header-order">
+                <a class="navbar-brand ml-2 btn " href="#">
+                   <img src="img/LogoDuoc.svg" alt="Logo duocUC">
+                </a>
+                
+                
+                
+                <div class="d-flex flex-row justify-content-end align-items-center" id="NavBarFormu">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item mb-1">
+                            <a class="nav-link" style="color:#000; font-size: 24px;" href="#"><i class="fab fa-facebook"></i></a>
+                        </li>
+                        <li class="nav-item mb-1">
+                            <a class="nav-link" style="color:#000; font-size: 24px;" href="#"><i class="fab fa-instagram"></i></a>
+                        </li>
+                        <li class="nav-item mb-1">
+                            <a class="nav-link" style="color:#000; font-size: 24px;" href="#"><i class="fab fa-twitter"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!--**********  /HEADER  **********-->
+
+    <!--**********  CONTENIDO  **********-->
+
+    <div class="container main">
+        
+        <div class="formularioActualizar">
+            <div class="infoFormulario">
+                <p class="titleForm">Semana informática 2019</p>
+                <p class="descripcionForm">
+                    Evento que celebra anualmente el año de la escuela informática reuniendo a gradiosos expositores de tecnologia del
+                    país.
+                </p>
+
+                <div class="microInfo">
+                    <div class="micro info-fecha">
+                        <img src="img/calendar.svg" width="16px" alt="Codigo de evento">
+                        <p>16 de Noviembre del 2019</p>
+                    </div>
+                    <div class="micro info-lugar">
+                        <img src="img/place.svg" width="16px" alt="Codigo de evento">
+                        <p>Costanera Center, Sala Hall, Santiago</p>
+                    </div>
+                </div>
+                <hr class="line-header" size="30">
+            </div>
+
+            <section class="formulario">
+                <form action="" method="POST">
+                    {% csrf_token %}
+            
+                    <div class="form-group">
+                        <label for="id_identificador"><b>RUN <span style="color: red">*</span></b></label>
+                        {{ form_asistente.identificador }}
+                    </div>
+            
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="id_nombre"><b>{{ form_asistente.nombre.label }} <span style="color: red">*</span></b></label>
+                            {{ form_asistente.nombre }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="id_apellido"><b>{{ form_asistente.apellido.label }} <span style="color: red">*</span></b></label>
+                            {{ form_asistente.apellido }}
+                        </div>
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="id_email"><b>{{ form_asistente.email.label }}</b></label>
+                        {{ form_asistente.email }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_telefono"><b>{{ form_asistente.telefono.label }}</b></label>
+                        {{ form_asistente.telefono }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_grupo"><b>{{ form_asistente.grupo.label }}</b></label>
+                        {{ form_asistente.grupo }}
+                    </div>
+                    <button type="submit" name="agregar_asistente" class="btn btn-block ml-auto w-25 " style="background-color: #000; color: #fff">Inscribir
+                    </button>
+                </form>
+            </section>
+        </div>
+    </div>
+    <!--**********  /CONTENIDO  **********-->
+    
+</body>
+</html>

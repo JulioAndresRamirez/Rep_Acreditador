@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="es">
+{% load static %}
+{% load admin_urls %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    {% block styles %}{% endblock styles %}
+    <title>{% block title %}Base{% endblock title %}</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light px-4 shadow-sm" style="background-color: white">
+
+            <a class="navbar-brand " href="#">
+                <img src="{% static 'core/img/Logo_DuocUC.svg' %}" height="35" alt="Logo_DuocUC">
+            </a>
+            <!-- Boton Hamburguesa -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse align-items-center" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" style="font-weight: 700" href="{% url 'index' %}">Acreditacion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="font-weight: 700" href="{% url 'datos' %}">Datos</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                        {% if perms.asistente.can_add %}
+                            <li class="nav-item">
+                              <a class="btn btn-primary nav-link mr-4" style="color:white" href="{% url 'admin:core_asistente_changelist' %}">Administrador</a>
+                            </li>
+                        {% endif %}
+                    <li class="nav-item">
+                        <a class="btn btn-secondary nav-link" style="color:white; width: 80px" href="{% url 'logout' %}">Salir</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- CONTENIDO -->
+
+    {% block content %}
+
+    {% endblock content %}
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+    {% block script %}
+
+    {% endblock script %}
+</body>
+</html>

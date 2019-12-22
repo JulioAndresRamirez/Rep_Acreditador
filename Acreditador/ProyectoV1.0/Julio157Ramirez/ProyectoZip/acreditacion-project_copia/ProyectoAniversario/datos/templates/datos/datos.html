@@ -1,0 +1,195 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %} Datos | DuocUC {% endblock %}
+
+{% block content %}
+    <div class="containe pt-4">
+        <div class="title d-flex justify-content-between align-items-center mb-3">
+            <h2 style="display: inline-block; font-weight: 800">Bienvenidos - Trabajos del Futuro</h2>
+        </div>
+
+        <div class="card-deck">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title" style="font-weight: 400">Numero de asistentes</h3>
+                    <h6 class="card-subtitle mb-2 text-muted">Numero total de inscritos para el evento</h6>
+                    <p class="card-text n-data" id="asistentes">{{ asistentes.count }}</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title" style="font-weight: 400">Numero de acreditados</h3>
+                    <h6 class="card-subtitle mb-2 text-muted">Numero total de acreditados</h6>
+                    <p class="card-text n-data" id="acreditados">{{ acreditados.count }}</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ porcAcreditados }}%;"
+                             aria-valuenow="{{ porcAcreditados }}"
+                             aria-valuemin="0" aria-valuemax="100" id="porcAcreditados">{{ porcAcreditados }}%
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                </div>
+            </div>
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title" style="font-weight: 400">Numero de ausentes</h3>
+                    <h6 class="card-subtitle mb-2 text-muted">Numero total de ausentes para el evento</h6>
+                    <p class="card-text n-data" id="noAcreditados">{{ noAcreditados.count }}</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container box-base shadow my-5">
+        <div>
+            <p class="title-table">Distribución de asistentes durante el día</p>
+        </div>
+        <canvas id="myChart"></canvas>
+    </div>
+
+
+    <div class="test-table table-responsive">
+        <div>
+            <p class="title-table">Lista de acreditados</p>
+        </div>
+        <table class="table table-striped table-borderless table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Run</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Hora de acreditacion</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if acreditados.count > 0 %}
+                {% for asis in acreditados %}
+                    <tr>
+                        <th scope="row">{{ asis.identificador }}</th>
+                        <td>{{ asis.nombre }} {{ asis.apellido }}</td>
+                        <td>{{ asis.email }}</td>
+                        <td>{{ asis.updated }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4">No se encuentran asistentes acreditados.</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+    <script>
+
+        var myChart = myChart || null;
+
+        $(document).ready(function () {
+            setInterval(f, 5000);
+            f();
+        });
+
+        function f() {
+            $.ajax({
+                url: '{% url "updateDatos" %}',
+                dataType: 'json',
+                success: function (data) {
+                    /*
+                    console.log(data.asistentes);
+                    console.log(data.acreditados);
+                    console.log(data.porcAcreditados);
+                    console.log(data.noAcreditados);
+                    console.log(data.numeros);
+                    */
+                    $('#asistentes').html(data.asistentes);
+                    $('#acreditados').html(data.acreditados);
+                    $('#porcAcreditados').html(data.porcAcreditados);
+                    $('#noAcreditados').html(data.noAcreditados);
+
+                    let ctx = document.getElementById("myChart").getContext('2d');
+                    if (myChart == null) {
+                        myChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: data.etiquetas,
+                                datasets: [{
+                                    data: data.numeros,
+                                    lineTension: 0,
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#007bff',
+                                    borderWidth: 4,
+                                    pointBackgroundColor: '#007bff'
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: false
+                                        }
+                                    }]
+                                },
+                                legend: {
+                                    display: false,
+                                }
+                            }
+                        });
+                    } else {
+                        myChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: data.etiquetas,
+                                datasets: [{
+                                    data: data.numeros,
+                                    lineTension: 0,
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#007bff',
+                                    borderWidth: 4,
+                                    pointBackgroundColor: '#007bff'
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: false
+                                        }
+                                    }]
+                                },
+                                legend: {
+                                    display: false,
+                                },
+                                animation: {
+                                    duration: 0, // general animation time
+                                },
+                                hover: {
+                                    animationDuration: 0, // duration of animations when hovering an item
+                                },
+                                responsiveAnimationDuration: 0, // animation duration after a resize
+                            }
+                        });
+                    };
+                }
+            });
+        };
+
+    </script>
+
+{% endblock %}

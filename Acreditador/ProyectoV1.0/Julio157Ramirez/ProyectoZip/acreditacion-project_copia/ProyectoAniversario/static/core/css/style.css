@@ -1,0 +1,111 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    /*background: #F5F6FA;*/
+    background-color: #EAEBEF;
+}
+
+/*------------  Nose pues  ------------*/
+.containe {
+    display: block;
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.n-data {
+    font-size: 3.4em;
+    font-weight: 700;
+}
+
+.text-nav {
+    font-size: 1em;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.carde {
+    -webkit-box-shadow: 0px 5px 12px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0px 5px 12px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 5px 12px 2px rgba(0, 0, 0, 0.05);
+}
+
+
+
+
+/*------------  TEST TABLES  ------------*/
+
+.test-table {
+    background: white;
+    width: 90%;
+    margin: 50px auto;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 15px 20px;
+
+    -webkit-box-shadow: 0px 5px 24px 1px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0px 5px 24px 1px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 5px 24px 1px rgba(0, 0, 0, 0.15);
+}
+
+.table-scroll{
+    max-height: 800px;
+    overflow: scroll;
+}
+
+.title-table{
+    display: inline-block;
+    font-size: 1.5em;
+    font-weight: 800;
+}
+
+.test-table .p-table{
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 0.8em;
+}
+
+/*
+.test-table tbody th {
+    border-radius: 8px 0 0 8px;
+}
+
+.test-table tr td:last-child{
+    border-radius: 0 8px 8px 0;
+}
+*/
+
+.ult{
+    border-radius: 0 8px 8px 0;
+}
+
+.prin{
+    border-radius: 8px 0 0 8px;
+}
+
+
+
+/*------------  BOX FORMAT  ------------*/
+
+.box-base{
+    background: white;
+    width: 90%;
+    margin: 30px auto;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 15px 20px;
+}
+
+.per-shadow {
+    -webkit-box-shadow: 0px 5px 12px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0px 5px 12px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 5px 12px 2px rgba(0, 0, 0, 0.05);
+}
